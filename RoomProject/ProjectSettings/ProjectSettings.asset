@@ -696,10 +696,10 @@ PlayerSettings:
     Purchasing: 0
     UNet: 0
     Unity_Ads: 0
-  facebookSdkVersion: 
+  facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: 7f23e092-4ca2-4a93-907b-911615b99c68
-  projectName: 
+  projectName: RoomProject
   organizationId: buttception
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
