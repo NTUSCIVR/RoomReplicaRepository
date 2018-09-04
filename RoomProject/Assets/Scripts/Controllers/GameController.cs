@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 //manage the events that occurs in the application
-public class GameController : Singleton<GameController> {
+public class GameController : MonoBehaviour {
 
+    public static GameController Instance;
     bool dropped = false;
     public GameObject cameraRig;
     public GameObject collaspeFloor;
@@ -12,14 +14,18 @@ public class GameController : Singleton<GameController> {
     public bool fall = false;
     float fallSpeed = 0f;
 
+    string userID;
+
     private void Awake()
     {
-        
+        Instance = this;
+        //find the steamvr eye and assign it to data collector
+        DataCollector.Instance.user = FindObjectOfType<SteamVR_Camera>().gameObject;
     }
 
     // Use this for initialization
     void Start () {
-        
+        userID = DataCollector.Instance.dataID;
     }
 	
 	// Update is called once per frame
@@ -32,6 +38,11 @@ public class GameController : Singleton<GameController> {
                 EngageFloorDrop();
                 ActiveFallZones();
             }
+        }
+        if(Input.GetKey(KeyCode.Space))
+        {
+            SceneManager.LoadScene("StartScene");
+            Destroy(DataCollector.Instance.gameObject);
         }
 
         if(fall)

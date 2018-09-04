@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioController : Singleton<AudioController> {
+public class AudioController : MonoBehaviour {
 
+    public static AudioController Instance;
     public AudioSource efxSource;                   //Drag a reference to the audio source which will play the sound effects.
     public AudioSource musicSource;                 //Drag a reference to the audio source which will play the music.      
     public float lowPitchRange = .95f;              //The lowest a sound effect will be randomly pitched.
@@ -11,6 +12,11 @@ public class AudioController : Singleton<AudioController> {
 
     public AudioClip fall;
     public AudioClip openHole;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     //Used to play single sound clips.
     public void PlaySingle(AudioClip clip)
