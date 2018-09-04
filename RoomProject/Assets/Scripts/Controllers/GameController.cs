@@ -28,6 +28,7 @@ public class GameController : Singleton<GameController> {
         {
             if (!dropped)
             {
+                AudioController.Instance.PlaySingle(AudioController.Instance.openHole);
                 EngageFloorDrop();
                 ActiveFallZones();
             }
@@ -39,6 +40,7 @@ public class GameController : Singleton<GameController> {
             cameraRig.transform.position = new Vector3(0f, cameraRig.transform.position.y - fallSpeed * Time.deltaTime, 0f);
             if(cameraRig.transform.position.y < -10)
             {
+                AudioController.Instance.PlaySingle(AudioController.Instance.fall);
                 fall = false;
                 cameraRig.transform.position = new Vector3(0f, -10f, 0);
             }
