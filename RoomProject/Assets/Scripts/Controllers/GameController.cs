@@ -20,12 +20,15 @@ public class GameController : MonoBehaviour {
     {
         Instance = this;
         //find the steamvr eye and assign it to data collector
-        DataCollector.Instance.user = FindObjectOfType<SteamVR_Camera>().gameObject;
+        if (DataCollector.Instance != null)
+        {
+            DataCollector.Instance.user = FindObjectOfType<SteamVR_Camera>().gameObject;
+            userID = DataCollector.Instance.dataID;
+        }
     }
 
     // Use this for initialization
     void Start () {
-        userID = DataCollector.Instance.dataID;
     }
 	
 	// Update is called once per frame
