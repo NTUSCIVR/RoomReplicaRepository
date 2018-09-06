@@ -543,7 +543,7 @@ MonoBehaviour:
   inputField: {fileID: 1487574343}
   dataID: 
   startRecording: 0
-  dataRecordInterval: 0.001
+  dataRecordInterval: 0.5
   user: {fileID: 0}
 --- !u!1 &1487574341
 GameObject:
