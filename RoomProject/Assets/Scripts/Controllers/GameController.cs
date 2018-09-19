@@ -56,7 +56,7 @@ public class GameController : MonoBehaviour {
             {
                 AudioController.Instance.PlaySingle(AudioController.Instance.fall);
                 fall = false;
-                cameraRig.transform.position = new Vector3(0f, -10f, 0);
+                cameraRig.transform.position = new Vector3(0f, -7f, 0);
             }
         }
     }
