@@ -16,6 +16,7 @@ public class CubeController : MonoBehaviour {
 	void Update () {
         if (GetComponent<Rigidbody>().useGravity)
         {
+            //start the despawn timer when gravity is enabled on the cubes
             time += Time.deltaTime;
             if (time > timeToDespawn)
                 Destroy(gameObject);

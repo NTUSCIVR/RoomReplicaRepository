@@ -19,6 +19,7 @@ public class FallEvent : MonoBehaviour {
     {
         if (other.tag == "MainCamera")
         {
+            //a trigger box just to make the user drop
             GameController.Instance.fall = true;
             Debug.Log("camera entered fall zone");
         }

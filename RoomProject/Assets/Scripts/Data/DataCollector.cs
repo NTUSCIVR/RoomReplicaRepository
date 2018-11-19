@@ -7,19 +7,26 @@ using UnityEngine.UI;
 
 public class DataCollector : MonoBehaviour {
 
+    //the input field in the start scenes
     public InputField inputField;
+    //the id of the user
     public string dataID = "";
     public static DataCollector Instance;
 
+    //bool to control when the collector starts recording data
     public bool startRecording = false;
+    //how often the collector writes into the file in data/second
     public float dataRecordInterval = 1f;
     float time = 0f;
     
+    //the players
     public GameObject user;
 
     private void Awake()
     {
+        //dont destroy the datacollector through scenes
         DontDestroyOnLoad(this);
+        //get the input field in the scene
         AssignInputField();
     }
 
@@ -36,6 +43,7 @@ public class DataCollector : MonoBehaviour {
             if (time > dataRecordInterval)
             {
                 time = 0;
+                //add the new data sets into the csv
                 StreamWriter sw = File.AppendText(GetPath());
                 sw.WriteLine(GenerateData());
                 sw.Close();
@@ -43,23 +51,32 @@ public class DataCollector : MonoBehaviour {
         }
 	}
 
+    //when input get submited
     void OnInputSubmitCallback()
     {
         Debug.Log("change scene");
+        //assign the data id
         dataID = inputField.text;
+        //create the csv
         CreateCSV();
+        //start recording the user tracking data
         startRecording = true;
+        //load the next scene
         SceneManager.LoadScene("MainScene");
     }
 
     void AssignInputField()
     {
+        //wew find the object
+        //probably shouldnt do like tat
         inputField = FindObjectOfType<InputField>();
+        //add the callback function for on submit
         inputField.onEndEdit.AddListener(delegate { OnInputSubmitCallback(); });
     }
 
     string GenerateData()
     {
+        //get the time in hour, min, second, millisecond
         string data = "";
         data += System.DateTime.Now.ToString("HH");
         data += ":";
@@ -69,38 +86,45 @@ public class DataCollector : MonoBehaviour {
         data += ":";
         data += System.DateTime.Now.ToString("FFF");
         data += ",";
+        //gets the position
         string posstr = user.GetComponent<SteamVR_Camera>().head.transform.position.ToString("F3");
+        //change the commas cuz csv shit
         data += ChangeLetters(posstr, ',', '.');
         data += ",";
+        //get the rotations
         string rotstr = user.GetComponent<SteamVR_Camera>().head.transform.rotation.ToString("F3");
         data += ChangeLetters(rotstr, ',', '.');
         return data;
     }
 
+    //returns the file path being used to store the data
     private string GetPath()
     {
-#if UNITY_EDITOR
-        return Application.dataPath + "/Data/" + dataID + ".csv";
-#elif UNITY_ANDROID
-        return Application.persistentDataPath+dataID + ".csv";
-#elif UNITY_IPHONE
-        return Application.persistentDataPath+"/"+dataID + ".csv";
-#else
-        return Application.dataPath +"/"+dataID + ".csv";
-#endif
+        //if the filepath already exists, create a new file with a duplicate number
+        string filePath = Application.dataPath + "/Data/" + dataID + ".csv";
+        int duplicateCounts = 0;
+        while (true)
+        {
+            if (File.Exists(filePath))
+            {
+                ++duplicateCounts;
+                filePath = Application.dataPath + "/Data/" + dataID + "(" + duplicateCounts.ToString() + ")" + ".csv";
+            }
+            else
+                break;
+        }
+        return filePath;
     }
 
     void CreateCSV()
     {
-        if(File.Exists(GetPath()))
-        {
-            File.Delete(GetPath());
-        }
+        //create a new csv for the user
         StreamWriter output = System.IO.File.CreateText(GetPath());
         output.WriteLine("Time, Position, Rotation");
         output.Close();
     }
 
+    //need this as csv cant use commas .-.
     string ChangeLetters(string str, char letter, char toBeLetter)
     {
         char[] ret = str.ToCharArray();
